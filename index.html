@@ -319,13 +319,13 @@
     <button class="nav-tab" onclick="showPage('workout')">Workout</button>
     <button class="nav-tab" onclick="showPage('progress')">Progress</button>
     <button class="nav-tab" onclick="showPage('profile')">Profile</button>
-    <button class="nav-tab" onclick="showPage('coach')" id="coach-tab">Coach ✦</button>
-    <button class="nav-tab" onclick="showPage('bodyscan')">Body 📷</button>
+    <button class="nav-tab" onclick="showPage('coach')" id="coach-tab">Coach &#10022;</button>
+    <button class="nav-tab" onclick="showPage('bodyscan')">Body [CAM]</button>
   </div>
   <div class="location-badge" onclick="showLocationModal()">
     <div class="loc-dot"></div>
     <span class="loc-label" id="current-location-label">24 Hour Fitness</span>
-    <span class="loc-arrow" style="color:var(--muted);font-size:11px;">▾</span>
+    <span class="loc-arrow" style="color:var(--muted);font-size:11px;">&#9662;</span>
   </div>
 </nav>
 
@@ -372,7 +372,7 @@
   </div>
   <div class="recent-workouts" id="recent-workouts">
     <div class="empty-state">
-      <div class="empty-icon">🏋️</div>
+      <div class="empty-icon">[GYM]</div>
       <div class="empty-title">NO WORKOUTS YET</div>
       <div class="empty-sub">Start your first session to begin tracking</div>
       <button class="btn btn-primary" onclick="startNewWorkout()">Start First Workout</button>
@@ -396,7 +396,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;" id="session-title">PUSH DAY</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="session-subtitle">Chest · Shoulders · Triceps</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="session-subtitle">Chest &middot; Shoulders &middot; Triceps</div>
         </div>
         <div class="timer" id="session-timer">0:00</div>
       </div>
@@ -418,7 +418,7 @@
   </div>
 
   <div id="workout-empty" style="text-align:center;padding:60px 24px;">
-    <div class="empty-icon">⚡</div>
+    <div class="empty-icon">*</div>
     <div class="empty-title">NO ACTIVE SESSION</div>
     <div class="empty-sub">Go to Dashboard and tap New Session to begin</div>
     <button class="btn btn-primary" onclick="startNewWorkout()">Start Session</button>
@@ -551,7 +551,7 @@
 
 ```
 <div style="margin-bottom:16px;">
-  <div style="font-weight:600;font-size:14px;margin-bottom:8px;">📍 24 Hour Fitness - Yorba Linda</div>
+  <div style="font-weight:600;font-size:14px;margin-bottom:8px;">[PIN] 24 Hour Fitness - Yorba Linda</div>
   <div class="form-group">
     <label class="form-label">Available Equipment</label>
     <div class="toggle-group" id="gym-equip">
@@ -568,7 +568,7 @@
 </div>
 
 <div>
-  <div style="font-weight:600;font-size:14px;margin-bottom:8px;">🏠 Garage Gym</div>
+  <div style="font-weight:600;font-size:14px;margin-bottom:8px;">[HOME] Garage Gym</div>
   <div class="form-group">
     <label class="form-label">Available Equipment</label>
     <div class="toggle-group" id="home-equip">
@@ -591,9 +591,9 @@
 
   <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;">
     <div class="section-title" style="margin-bottom:8px;">IMPORT FROM FITBOD</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Bring in your full Fitbod workout history. In the Fitbod app go to <strong style="color:var(--text);">Profile → Export Workout Data</strong> to get your CSV file.</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Bring in your full Fitbod workout history. In the Fitbod app go to <strong style="color:var(--text);">Profile -&gt; Export Workout Data</strong> to get your CSV file.</div>
     <button class="btn btn-secondary" style="width:100%;justify-content:center;gap:10px;" onclick="showModal('fitbod-import-modal')">
-      <span style="font-size:18px;">📥</span> Import Fitbod CSV
+      <span style="font-size:18px;">[IMPORT]</span> Import Fitbod CSV
     </button>
   </div>
 
@@ -601,14 +601,14 @@
     <div class="section-title" style="margin-bottom:8px;">RESTORE FROM BACKUP</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Restore your FORGE data from a previously exported XML or JSON backup file.</div>
     <div id="restore-dropzone" style="border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;" onclick="document.getElementById('restore-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleRestoreDrop(event)">
-      <div style="font-size:32px;margin-bottom:8px;">🔄</div>
+      <div style="font-size:32px;margin-bottom:8px;">[REFRESH]</div>
       <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Drop backup file here</div>
       <div style="font-size:12px;color:var(--muted);">Accepts .xml or .json FORGE backup files</div>
       <input type="file" id="restore-file-input" accept=".xml,.json" style="display:none" onchange="handleRestoreFile(event)">
     </div>
     <div id="restore-status" style="display:none;padding:12px;border-radius:8px;font-size:13px;margin-bottom:12px;"></div>
     <div id="restore-confirm-row" style="display:none;gap:10px;display:none;">
-      <button class="btn btn-primary" style="flex:1;" onclick="confirmRestore()">✓ Restore Data</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmRestore()">&#10003; Restore Data</button>
       <button class="btn btn-secondary" onclick="cancelRestore()">Cancel</button>
     </div>
   </div>
@@ -623,12 +623,12 @@
     <div style="font-size:13px;font-weight:600;">Internal Backup</div>
     <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="internal-backup-status">Loading...</div>
   </div>
-  <button class="btn btn-secondary btn-sm" onclick="downloadInternalBackup()">⬇ Download</button>
+  <button class="btn btn-secondary btn-sm" onclick="downloadInternalBackup()">&darr; Download</button>
 </div>
 
 <div style="display:flex;gap:10px;">
-  <button class="btn btn-secondary" style="flex:1;" onclick="downloadXML()">⬇ XML</button>
-  <button class="btn btn-secondary" style="flex:1;" onclick="exportData()">⬇ JSON</button>
+  <button class="btn btn-secondary" style="flex:1;" onclick="downloadXML()">&darr; XML</button>
+  <button class="btn btn-secondary" style="flex:1;" onclick="exportData()">&darr; JSON</button>
 </div>
 ```
 
@@ -644,15 +644,15 @@
 <div id="page-coach" class="page">
   <div class="chat-header">
     <div class="chat-header-top">
-      <div class="coach-avatar">🤖</div>
+      <div class="coach-avatar">[BOT]</div>
       <div>
         <div class="coach-name">FORGE COACH</div>
-        <div class="coach-status">Powered by Claude · Always ready</div>
+        <div class="coach-status">Powered by Claude &middot; Always ready</div>
       </div>
     </div>
     <div class="chat-context-bar" id="context-bar">
       <div class="context-chip" id="ctx-session">No active session</div>
-      <div class="context-chip" id="ctx-location">📍 24 Hour Fitness</div>
+      <div class="context-chip" id="ctx-location">[PIN] 24 Hour Fitness</div>
       <div class="context-chip" id="ctx-goal">Goal: General Health</div>
       <div class="context-chip" id="ctx-history">0 workouts logged</div>
     </div>
@@ -662,7 +662,7 @@
 
   <div class="chat-input-area">
     <div class="chat-suggestions" id="chat-suggestions">
-      <div class="suggestion-chip" onclick="sendSuggestion(this)">I'm feeling extra strong today, punch it up 💪</div>
+      <div class="suggestion-chip" onclick="sendSuggestion(this)">I'm feeling extra strong today, punch it up [STRONG]</div>
       <div class="suggestion-chip" onclick="sendSuggestion(this)">What muscles should I train today?</div>
       <div class="suggestion-chip" onclick="sendSuggestion(this)">Explain how to do a Bulgarian split squat</div>
       <div class="suggestion-chip" onclick="sendSuggestion(this)">How do I break through a plateau?</div>
@@ -671,7 +671,7 @@
     </div>
     <div class="chat-input-row">
       <textarea class="chat-input" id="chat-input" placeholder="Ask your coach anything..." rows="1" onkeydown="chatKeydown(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendChatMessage()">➤</button>
+      <button class="send-btn" id="send-btn" onclick="sendChatMessage()">&gt;</button>
     </div>
   </div>
 </div>
@@ -680,10 +680,10 @@
 
 <div id="page-bodyscan" class="page">
   <div class="greeting" style="font-size:36px;margin-bottom:4px;">BODY <span class="accent">SCAN</span></div>
-  <div class="subtext" style="margin-bottom:24px;">AI-powered body composition analysis · Results are estimates only</div>
+  <div class="subtext" style="margin-bottom:24px;">AI-powered body composition analysis &middot; Results are estimates only</div>
 
   <div style="background:rgba(253,185,39,0.06);border:1px solid rgba(253,185,39,0.2);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:13px;">
-    ⚠️ <strong style="color:var(--gold);">Accuracy disclaimer:</strong> <span style="color:var(--muted);">Body fat estimates from photos vary ±3-5%. Use as a general trend tracker, not a clinical measurement. Consistent lighting, pose, and clothing give the most reliable comparisons over time.</span>
+    (!) <strong style="color:var(--gold);">Accuracy disclaimer:</strong> <span style="color:var(--muted);">Body fat estimates from photos vary &plusmn;3-5%. Use as a general trend tracker, not a clinical measurement. Consistent lighting, pose, and clothing give the most reliable comparisons over time.</span>
   </div>
 
   <!-- Scan Controls -->
@@ -732,7 +732,7 @@
     <div style="margin-top:10px;font-size:12px;color:var(--muted);">Tap to retake photo</div>
   </div>
   <div id="scan-photo-placeholder">
-    <div style="font-size:40px;margin-bottom:8px;">📷</div>
+    <div style="font-size:40px;margin-bottom:8px;">[CAM]</div>
     <div style="font-weight:600;margin-bottom:4px;">Take or Upload Photo</div>
     <div style="font-size:12px;color:var(--muted);">Front-facing, good lighting, neutral pose<br>Fitted clothing or shirtless for best results</div>
   </div>
@@ -740,7 +740,7 @@
 <input type="file" id="camera-input" accept="image/*" capture="user" style="display:none" onchange="handleScanPhoto(event)">
 
 <button class="btn btn-primary" style="width:100%;justify-content:center;" id="analyze-btn" onclick="runBodyScan()">
-  ✨ Analyze with AI
+  * Analyze with AI
 </button>
 ```
 
@@ -780,8 +780,8 @@
 <div class="modal-overlay" id="fitbod-import-modal">
   <div class="modal" style="max-width:600px;">
     <div class="modal-header">
-      <div class="modal-title">📥 IMPORT FITBOD DATA</div>
-      <button class="close-btn" onclick="closeModal('fitbod-import-modal')">✕</button>
+      <div class="modal-title">[IMPORT] IMPORT FITBOD DATA</div>
+      <button class="close-btn" onclick="closeModal('fitbod-import-modal')">&#10005;</button>
     </div>
     <div class="modal-body">
 
@@ -790,11 +790,11 @@
   <div id="fitbod-step-upload">
     <div style="background:rgba(85,37,131,0.2);border:1px solid rgba(85,37,131,0.5);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:13px;">
       <strong style="color:var(--accent);">How to export from Fitbod:</strong><br>
-      <span style="color:var(--muted);">Open Fitbod → Profile tab → Settings (⚙) → Export Workout Data → Share the CSV file here.</span>
+      <span style="color:var(--muted);">Open Fitbod -&gt; Profile tab -&gt; Settings (&#9881;) -&gt; Export Workout Data -&gt; Share the CSV file here.</span>
     </div>
 
     <div id="fitbod-dropzone" style="border:2px dashed var(--border);border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('fitbod-file-input').click()" ondragover="fitbodDragOver(event)" ondragleave="fitbodDragLeave(event)" ondrop="fitbodDrop(event)">
-      <div style="font-size:48px;margin-bottom:12px;">📂</div>
+      <div style="font-size:48px;margin-bottom:12px;">[FOLDER]</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:6px;">DROP CSV HERE</div>
       <div style="font-size:13px;color:var(--muted);">or click to browse</div>
       <input type="file" id="fitbod-file-input" accept=".csv" style="display:none" onchange="handleFitbodFile(event)">
@@ -843,7 +843,7 @@
     <div id="fitbod-preview-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;max-height:220px;overflow-y:auto;"></div>
 
     <div style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--muted);">
-      ⚠️ <strong style="color:var(--text);">Existing data:</strong> Importing will merge with your current history. Duplicate dates will be skipped.
+      (!) <strong style="color:var(--text);">Existing data:</strong> Importing will merge with your current history. Duplicate dates will be skipped.
     </div>
 
     <div style="display:flex;gap:10px;">
@@ -854,7 +854,7 @@
 
   <!-- Step 4: Done -->
   <div id="fitbod-step-done" style="display:none;text-align:center;padding:32px 16px;">
-    <div style="font-size:56px;margin-bottom:16px;">🏆</div>
+    <div style="font-size:56px;margin-bottom:16px;">[TROPHY]</div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">IMPORT COMPLETE</div>
     <div id="fitbod-done-msg" style="color:var(--muted);font-size:14px;margin-bottom:24px;"></div>
     <div style="display:flex;gap:10px;justify-content:center;">
@@ -875,15 +875,15 @@
   <div class="modal" style="max-width:400px;">
     <div class="modal-header">
       <div class="modal-title">SWITCH LOCATION</div>
-      <button class="close-btn" onclick="closeModal('location-modal')">✕</button>
+      <button class="close-btn" onclick="closeModal('location-modal')">&#10005;</button>
     </div>
     <div class="modal-body">
       <div class="location-option active" id="loc-gym" onclick="setLocation('gym')">
-        <div class="loc-name">📍 24 Hour Fitness - Yorba Linda</div>
+        <div class="loc-name">[PIN] 24 Hour Fitness - Yorba Linda</div>
         <div class="loc-equip">Full gym: Barbells, Dumbbells, Cables, Machines, Squat Rack, Cardio</div>
       </div>
       <div class="location-option" id="loc-home" onclick="setLocation('home')">
-        <div class="loc-name">🏠 Garage Gym</div>
+        <div class="loc-name">[HOME] Garage Gym</div>
         <div class="loc-equip">Barbells, Dumbbells, Squat Rack, Pull-up Bar, Kettlebells, Bands</div>
       </div>
     </div>
@@ -896,7 +896,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">ADD EXERCISE</div>
-      <button class="close-btn" onclick="closeModal('add-exercise-modal')">✕</button>
+      <button class="close-btn" onclick="closeModal('add-exercise-modal')">&#10005;</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -917,7 +917,7 @@
       <div id="exercise-options" style="max-height:320px;overflow-y:auto;"></div>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
         <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Don't see what you want? Type any exercise name and AI will set it up.</div>
-        <button class="btn btn-secondary" style="width:100%;" onclick="addCustomExercise()">✨ Add Custom Exercise with AI</button>
+        <button class="btn btn-secondary" style="width:100%;" onclick="addCustomExercise()">* Add Custom Exercise with AI</button>
       </div>
     </div>
   </div>
@@ -929,7 +929,7 @@
   <div class="modal" style="max-width:480px;">
     <div class="modal-header">
       <div class="modal-title">AI EXERCISE LOOKUP</div>
-      <button class="close-btn" onclick="closeModal('custom-exercise-modal')">✕</button>
+      <button class="close-btn" onclick="closeModal('custom-exercise-modal')">&#10005;</button>
     </div>
     <div class="modal-body">
       <div id="custom-ex-form">
@@ -937,7 +937,7 @@
           <label class="form-label">Exercise Name</label>
           <input class="form-input" id="custom-ex-name" placeholder="e.g. Bulgarian Split Squat">
         </div>
-        <button class="btn btn-primary" style="width:100%;" onclick="lookupCustomExercise()">✨ Look Up with AI</button>
+        <button class="btn btn-primary" style="width:100%;" onclick="lookupCustomExercise()">* Look Up with AI</button>
       </div>
       <div id="custom-ex-loading" style="display:none">
         <div class="ai-loading" style="padding:24px;">
@@ -955,8 +955,8 @@
 <div class="modal-overlay" id="finish-modal">
   <div class="modal" style="max-width:420px;">
     <div class="modal-header">
-      <div class="modal-title">🏆 SESSION COMPLETE</div>
-      <button class="close-btn" onclick="closeModal('finish-modal')">✕</button>
+      <div class="modal-title">[TROPHY] SESSION COMPLETE</div>
+      <button class="close-btn" onclick="closeModal('finish-modal')">&#10005;</button>
     </div>
     <div class="modal-body">
       <div id="finish-summary"></div>
@@ -968,7 +968,7 @@
   </div>
 </div>
 
-<div class="saved-toast" id="saved-toast">✓ Saved successfully</div>
+<div class="saved-toast" id="saved-toast">&#10003; Saved successfully</div>
 
 <script>
 // =========================================================
@@ -1204,7 +1204,7 @@ function calcStreak() {
 function renderRecentWorkouts() {
   const el = document.getElementById('recent-workouts');
   if (!state.workoutHistory.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🏋️</div><div class="empty-title">NO WORKOUTS YET</div><div class="empty-sub">Start your first session to begin tracking</div><button class="btn btn-primary" onclick="startNewWorkout()">Start First Workout</button></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">[GYM]</div><div class="empty-title">NO WORKOUTS YET</div><div class="empty-sub">Start your first session to begin tracking</div><button class="btn btn-primary" onclick="startNewWorkout()">Start First Workout</button></div>`;
     return;
   }
   const recent = [...state.workoutHistory].reverse().slice(0,5);
@@ -1213,7 +1213,7 @@ function renderRecentWorkouts() {
       <div class="workout-icon">${getWorkoutEmoji(w.muscles)}</div>
       <div class="workout-info">
         <div class="workout-name">${w.name}</div>
-        <div class="workout-meta">${new Date(w.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${w.duration} min · ${w.location==='gym'?'24 Hour Fitness':'Garage Gym'}</div>
+        <div class="workout-meta">${new Date(w.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})} &middot; ${w.duration} min &middot; ${w.location==='gym'?'24 Hour Fitness':'Garage Gym'}</div>
       </div>
       <div class="workout-stats">
         <div class="workout-vol">${w.totalVolume ? Math.round(w.totalVolume/1000)+'k' : w.sets+'sets'}</div>
@@ -1223,12 +1223,12 @@ function renderRecentWorkouts() {
 }
 
 function getWorkoutEmoji(muscles) {
-  if (!muscles) return '🏋️';
-  if (muscles.includes('legs')) return '🦵';
-  if (muscles.includes('back')) return '💪';
-  if (muscles.includes('chest')) return '🫀';
-  if (muscles.includes('shoulders')) return '⚡';
-  return '🏋️';
+  if (!muscles) return '[GYM]';
+  if (muscles.includes('legs')) return '[LEG]';
+  if (muscles.includes('back')) return '[STRONG]';
+  if (muscles.includes('chest')) return '[HEART]';
+  if (muscles.includes('shoulders')) return '*';
+  return '[GYM]';
 }
 
 // =========================================================
@@ -1308,7 +1308,7 @@ function calculateProgressiveLoad(exId, goalRepsRange, profile) {
   if (profile.level === 'beginner')      baseWeight = Math.round(baseWeight * 0.5);
   else if (profile.level === 'advanced') baseWeight = Math.round(baseWeight * 1.5);
 
-  // No history at all — start conservatively
+  // No history at all - start conservatively
   if (!history.length) {
     if (pr > 0) return { weight: Math.round(pr * 0.75), note: 'Starting from PR' };
     return { weight: baseWeight, note: 'Starting weight' };
@@ -1356,19 +1356,19 @@ function calculateProgressiveLoad(exId, goalRepsRange, profile) {
   let note = '';
 
   if (last.allSetsCompleted && lastAvgReps >= targetRepsHigh) {
-    // Crushed it — increase weight
+    // Crushed it - increase weight
     suggestedWeight = lastWeight + increment;
     note = `+${increment}lbs (completed all sets at top of range)`;
   } else if (last.allSetsCompleted && lastAvgReps >= targetRepsLow) {
-    // Completed all sets in range — hold weight, note solidifying
+    // Completed all sets in range - hold weight, note solidifying
     suggestedWeight = lastWeight;
     note = 'Hold weight - solidifying this load';
   } else if (!last.allSetsCompleted && lastAvgReps < targetRepsLow) {
-    // Struggled — reduce weight
+    // Struggled - reduce weight
     suggestedWeight = Math.max(Math.round(lastWeight * 0.95), baseWeight * 0.5);
     note = 'Reduced - previous session was tough';
   } else {
-    // In range but not all sets done — hold and aim for completion
+    // In range but not all sets done - hold and aim for completion
     suggestedWeight = lastWeight;
     note = 'Hold weight - aim to complete all sets';
   }
@@ -1547,7 +1547,7 @@ function buildWorkoutPlan() {
 function renderWorkout() {
   const s = state.session;
   document.getElementById('session-title').textContent = s.name;
-  document.getElementById('session-subtitle').textContent = s.muscles.join(' · ').replace(/\b\w/g,c=>c.toUpperCase());
+  document.getElementById('session-subtitle').textContent = s.muscles.join(' &middot; ').replace(/\b\w/g,c=>c.toUpperCase());
   document.getElementById('session-location').textContent = s.location === 'gym' ? '24 Hour Fitness' : 'Garage Gym';
   document.getElementById('session-target').textContent = `~${s.targetDuration} min`;
 
@@ -1558,7 +1558,7 @@ function renderWorkout() {
     const notice = document.createElement('div');
     notice.id = 'deload-notice';
     notice.style.cssText = 'background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;color:var(--danger);';
-    notice.innerHTML = '😴 <strong>Deload Week Detected</strong> — Your volume has been trending down. Weights are reduced ~15% to let your body recover. Push harder next week!';
+    notice.innerHTML = '[SLEEP] <strong>Deload Week Detected</strong> - Your volume has been trending down. Weights are reduced ~15% to let your body recover. Push harder next week!';
     document.querySelector('.session-header').appendChild(notice);
   }
 
@@ -1575,7 +1575,7 @@ function renderExerciseBlock(ex, i) {
   const isActive = ex.expanded;
   const completedCount = ex.completedSets.length;
   const tag = completedCount === ex.sessionSets
-    ? `<span class="tag tag-green">✓ Done</span>`
+    ? `<span class="tag tag-green">&#10003; Done</span>`
     : completedCount > 0
     ? `<span class="tag tag-yellow">${completedCount}/${ex.sessionSets} sets</span>`
     : `<span class="tag tag-orange">${ex.sessionSets} sets</span>`;
@@ -1589,14 +1589,14 @@ function renderExerciseBlock(ex, i) {
       <td><input class="set-input" value="${done ? done.weight : ex.suggestedWeight}" id="w-${i}-${s}" ${done?'disabled':''}> lbs</td>
       <td><input class="set-input" value="${done ? done.reps : ex.sessionReps.split('-')[0]}" id="r-${i}-${s}" ${done?'disabled':''}></td>
       <td style="color:var(--muted);font-size:12px;">${ex.sessionRest}s rest</td>
-      <td>${done ? `<span class="tag tag-green">✓</span>` : `<button class="complete-set-btn" onclick="completeSet(${i},${s})">Log Set</button>`}</td>
+      <td>${done ? `<span class="tag tag-green">&#10003;</span>` : `<button class="complete-set-btn" onclick="completeSet(${i},${s})">Log Set</button>`}</td>
     </tr>`;
   }
 
   // Progress note bar
   const progressBar = ex.progressNote ? `
     <div style="padding:8px 16px;border-top:1px solid var(--border);background:${ex.isDeload ? 'rgba(248,113,113,0.06)' : 'rgba(253,185,39,0.04)'};display:flex;align-items:center;gap:8px;">
-      <span style="font-size:14px;">${ex.isDeload ? '😴' : ex.sessionCount === 0 ? '🆕' : '📈'}</span>
+      <span style="font-size:14px;">${ex.isDeload ? '[SLEEP]' : ex.sessionCount === 0 ? '[NEW]' : '[CHART]'}</span>
       <span style="font-size:11px;color:${ex.isDeload ? 'var(--danger)' : 'var(--gold)'};">${ex.progressNote}</span>
       ${ex.sessionCount > 0 ? `<span style="font-size:10px;color:var(--muted);margin-left:auto;">${ex.sessionCount} prev sessions</span>` : ''}
     </div>` : '';
@@ -1610,8 +1610,8 @@ function renderExerciseBlock(ex, i) {
       </div>
       ${tag}
       <div class="exercise-actions">
-        <button class="btn btn-secondary btn-sm btn-icon" title="Swap exercise" onclick="swapExercise(${i},event)">↔</button>
-        <button class="btn btn-danger btn-sm btn-icon" title="Remove" onclick="removeExercise(${i},event)">×</button>
+        <button class="btn btn-secondary btn-sm btn-icon" title="Swap exercise" onclick="swapExercise(${i},event)">&lt;-&gt;</button>
+        <button class="btn btn-danger btn-sm btn-icon" title="Remove" onclick="removeExercise(${i},event)">&times;</button>
       </div>
     </div>
     ${isActive && ex.progressNote ? progressBar : ''}
@@ -1627,7 +1627,7 @@ function renderExerciseBlock(ex, i) {
       <tbody>${setsHTML}</tbody>
     </table>` : ''}
     <div class="exercise-footer">
-      <button class="btn btn-secondary btn-sm" onclick="swapExercise(${i},event)">↔ Swap Exercise</button>
+      <button class="btn btn-secondary btn-sm" onclick="swapExercise(${i},event)">&lt;-&gt; Swap Exercise</button>
       <button class="btn btn-secondary btn-sm" onclick="addSet(${i})">+ Add Set</button>
     </div>
   </div>`;
@@ -1647,7 +1647,7 @@ function completeSet(exIdx, setIdx) {
   // Check PR
   if (weight > 0 && (!state.personalRecords[ex.id] || weight > state.personalRecords[ex.id])) {
     state.personalRecords[ex.id] = weight;
-    showToast(`🏆 New PR: ${ex.name} — ${weight} lbs!`);
+    showToast(`[TROPHY] New PR: ${ex.name} - ${weight} lbs!`);
   }
 
   updateSetCounts();
@@ -1744,7 +1744,7 @@ function finishWorkout() {
     <div class="stats-row" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0;">
       <div class="stat-card highlight"><div class="label">Duration</div><div class="value">${duration}</div><div class="unit">minutes</div></div>
       <div class="stat-card"><div class="label">Sets Completed</div><div class="value">${doneSets}</div><div class="unit">sets</div></div>
-      <div class="stat-card"><div class="label">Total Volume</div><div class="value">${totalVolume>0?(totalVolume/1000).toFixed(1)+'k':'—'}</div><div class="unit">lbs</div></div>
+      <div class="stat-card"><div class="label">Total Volume</div><div class="value">${totalVolume>0?(totalVolume/1000).toFixed(1)+'k':'-'}</div><div class="unit">lbs</div></div>
       <div class="stat-card"><div class="label">Exercises</div><div class="value">${s.exercises.length}</div><div class="unit">movements</div></div>
     </div>`;
   showModal('finish-modal');
@@ -1811,7 +1811,7 @@ function filterExercises(query) {
     return `<div class="exercise-option ${available?'':'opacity-50'}" onclick="selectExerciseFromModal('${ex.id}')">
       <div style="flex:1">
         <div class="ex-opt-name">${ex.name} ${!available?'<span style="color:var(--danger);font-size:10px;">[no equip]</span>':''}</div>
-        <div class="ex-opt-meta">${ex.muscles.join(', ')} · ${ex.sessionSets||ex.sets} sets · ${ex.sessionReps||ex.reps} reps</div>
+        <div class="ex-opt-meta">${ex.muscles.join(', ')} &middot; ${ex.sessionSets||ex.sets} sets &middot; ${ex.sessionReps||ex.reps} reps</div>
       </div>
     </div>`;
   }).join('') || '<div style="color:var(--muted);padding:20px;text-align:center;font-size:13px;">No matching exercises found</div>';
@@ -1930,8 +1930,8 @@ Return ONLY a JSON object (no markdown, no backticks) with these fields:
           <div style="background:var(--bg3);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--muted);">REPS</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;">${result.reps}</div></div>
           <div style="background:var(--bg3);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--muted);">REST</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;">${result.rest}s</div></div>
         </div>
-        ${result.tips ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">💡 ${result.tips}</div>` : ''}
-        ${result.warnings ? `<div style="font-size:12px;color:var(--danger);">⚠️ ${result.warnings}</div>` : ''}
+        ${result.tips ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">[TIP] ${result.tips}</div>` : ''}
+        ${result.warnings ? `<div style="font-size:12px;color:var(--danger);">(!) ${result.warnings}</div>` : ''}
       </div>
       <button class="btn btn-primary" style="width:100%;" onclick="addCustomToSession('${customEx.id}')">Add to Workout</button>`;
   } catch(err) {
@@ -1968,7 +1968,7 @@ function renderVolumeChart() {
   const max = Math.max(...weeks.map(w=>w.val), 1);
   document.getElementById('volume-chart').innerHTML = weeks.map((w,i) =>
     `<div class="chart-bar ${i===weeks.length-1?'accent':''}" style="height:${Math.max(4,(w.val/max)*100)}%;">
-      <div class="tooltip">${w.label}: ${w.val > 0 ? Math.round(w.val/1000)+'k lbs' : '—'}</div>
+      <div class="tooltip">${w.label}: ${w.val > 0 ? Math.round(w.val/1000)+'k lbs' : '-'}</div>
     </div>`).join('');
   document.getElementById('volume-labels').innerHTML = weeks.map(w=>
     `<div style="font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;">${w.label}</div>`).join('');
@@ -2005,7 +2005,7 @@ function renderPRList() {
   const exMap = {};
   [...EXERCISE_DB, ...state.customExercises].forEach(e => exMap[e.id] = e.name);
 
-  // Build clean PR entries — skip _name keys, skip zero/invalid weights
+  // Build clean PR entries - skip _name keys, skip zero/invalid weights
   const entries = [];
   const seen = new Set();
 
@@ -2021,7 +2021,7 @@ function renderPRList() {
     let name = exMap[key];
     if (!name) name = state.personalRecords[key + '_name'];
     if (!name) {
-      // Clean up fitbod-style IDs like "fitbod-dumbbell-lunge" → "Dumbbell Lunge"
+      // Clean up fitbod-style IDs like "fitbod-dumbbell-lunge" -&gt; "Dumbbell Lunge"
       name = key
         .replace(/^fitbod-/, '')
         .replace(/^custom-\d+$/, 'Custom Exercise')
@@ -2043,10 +2043,10 @@ function renderPRList() {
   // Sort by weight descending
   entries.sort((a, b) => b.weight - a.weight);
 
-  const ranks = ['🥇','🥈','🥉'];
+  const ranks = ['[GOLD]','[SILVER]','[BRONZE]'];
   el.innerHTML = entries.map(({ name, weight }, i) => `
     <div class="pr-item">
-      <div class="pr-rank">${ranks[i] || '💪'}</div>
+      <div class="pr-rank">${ranks[i] || '[STRONG]'}</div>
       <div class="pr-exercise">${name}</div>
       <div style="display:flex;align-items:baseline;gap:2px;flex-shrink:0;">
         <span class="pr-weight">${weight.toLocaleString()}</span>
@@ -2063,7 +2063,7 @@ function renderHistoryList() {
       <div class="workout-icon">${getWorkoutEmoji(w.muscles)}</div>
       <div class="workout-info">
         <div class="workout-name">${w.name}</div>
-        <div class="workout-meta">${new Date(w.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${w.duration||'?'} min · ${w.location==='gym'?'24 Hour Fitness':'Garage Gym'}</div>
+        <div class="workout-meta">${new Date(w.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} &middot; ${w.duration||'?'} min &middot; ${w.location==='gym'?'24 Hour Fitness':'Garage Gym'}</div>
       </div>
       <div class="workout-stats">
         <div class="workout-vol">${w.totalVolume ? Math.round(w.totalVolume/1000)+'k' : w.sets||'?'}</div>
@@ -2253,7 +2253,7 @@ function parseFitbodCSV(csv) {
 
     if (!rawDate || !exName || isWarmup) continue;
 
-    // Parse date — Fitbod uses "2024-01-15 09:30:00" or "2024-01-15"
+    // Parse date - Fitbod uses "2024-01-15 09:30:00" or "2024-01-15"
     const dateStr = rawDate.split(' ')[0]; // "2024-01-15"
     const timeStr = rawDate.split(' ')[1] || '00:00:00';
     const hour    = timeStr.split(':')[0];
@@ -2377,9 +2377,9 @@ function showFitbodPreview(workouts) {
   const newest = new Date(datesSorted[datesSorted.length-1]).toLocaleDateString('en-US',{month:'short',year:'numeric'});
 
   document.getElementById('fitbod-preview-stats').innerHTML = `
-    <div class="stat-card highlight"><div class="label">Workouts Found</div><div class="value">${workouts.length}</div><div class="unit">${oldest} → ${newest}</div></div>
+    <div class="stat-card highlight"><div class="label">Workouts Found</div><div class="value">${workouts.length}</div><div class="unit">${oldest} -&gt; ${newest}</div></div>
     <div class="stat-card"><div class="label">Total Sets</div><div class="value">${totalSets.toLocaleString()}</div><div class="unit">logged sets</div></div>
-    <div class="stat-card"><div class="label">Total Volume</div><div class="value">${totalVol > 0 ? Math.round(totalVol/1000).toLocaleString()+'k' : '—'}</div><div class="unit">lbs lifted</div></div>`;
+    <div class="stat-card"><div class="label">Total Volume</div><div class="value">${totalVol > 0 ? Math.round(totalVol/1000).toLocaleString()+'k' : '-'}</div><div class="unit">lbs lifted</div></div>`;
 
   document.getElementById('import-count').textContent = workouts.length;
 
@@ -2392,11 +2392,11 @@ function showFitbodPreview(workouts) {
         <div style="font-weight:600;font-size:13px;">${w.name}</div>
         <div style="font-size:11px;color:var(--muted);">
           ${new Date(w.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}
-          · ${w.exercises.length} exercises · ${w.sets} sets
+          &middot; ${w.exercises.length} exercises &middot; ${w.sets} sets
         </div>
       </div>
       <div style="text-align:right;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);">${w.totalVolume > 0 ? Math.round(w.totalVolume/1000)+'k' : '—'}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);">${w.totalVolume > 0 ? Math.round(w.totalVolume/1000)+'k' : '-'}</div>
         <div style="font-size:10px;color:var(--muted);">lbs</div>
       </div>
     </div>`).join('');
@@ -2536,10 +2536,10 @@ function initCoach() {
     const hasSession = !!state.session;
     const workoutCount = state.workoutHistory.length;
     const greeting = hasSession
-      ? `Hey ${name}! I can see you've got a **${state.session.name}** session loaded. Ask me anything — want to pump up the intensity, swap an exercise, or need a form tip? I'm here.`
+      ? `Hey ${name}! I can see you've got a **${state.session.name}** session loaded. Ask me anything - want to pump up the intensity, swap an exercise, or need a form tip? I'm here.`
       : workoutCount > 0
-      ? `Hey ${name}! You've got **${workoutCount} workouts** logged. I know your history, your goals, and your limitations — so ask me anything. Need a recommendation, form help, or just wondering what to train today?`
-      : `Hey ${name}! I'm your FORGE Coach — powered by Claude. I know your profile, goals, and current session. Ask me anything: exercise tips, workout adjustments, nutrition questions, or just "what should I do today?"`;
+      ? `Hey ${name}! You've got **${workoutCount} workouts** logged. I know your history, your goals, and your limitations - so ask me anything. Need a recommendation, form help, or just wondering what to train today?`
+      : `Hey ${name}! I'm your FORGE Coach - powered by Claude. I know your profile, goals, and current session. Ask me anything: exercise tips, workout adjustments, nutrition questions, or just "what should I do today?"`;
     addCoachMessage(greeting, []);
   }
 }
@@ -2548,11 +2548,11 @@ function updateContextBar() {
   const s = state.session;
   const ctx = document.getElementById('ctx-session');
   if (ctx) {
-    ctx.textContent = s ? `🏋️ Active: ${s.name}` : 'No active session';
+    ctx.textContent = s ? `[GYM] Active: ${s.name}` : 'No active session';
     ctx.classList.toggle('active', !!s);
   }
   const loc = document.getElementById('ctx-location');
-  if (loc) loc.textContent = `📍 ${state.location === 'gym' ? '24 Hour Fitness' : 'Garage Gym'}`;
+  if (loc) loc.textContent = `[PIN] ${state.location === 'gym' ? '24 Hour Fitness' : 'Garage Gym'}`;
   const goal = document.getElementById('ctx-goal');
   if (goal) {
     const goalLabels = {general:'General Health',strength:'Strength',hypertrophy:'Muscle Mass',endurance:'Endurance','weight-loss':'Fat Loss'};
@@ -2586,7 +2586,7 @@ function buildSystemPrompt() {
     ? recentWorkouts.map(w => `  - ${new Date(w.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}: ${w.name} (${w.duration||'?'}min, ${w.sets||'?'} sets)`).join('\n')
     : '  None yet.';
 
-  return `You are FORGE Coach, an expert personal trainer and fitness coach embedded in the FORGE fitness tracking app. You have full context about this user and should give specific, actionable, personalized advice. Be direct, motivating, and concise — like a real coach, not a textbook. Use casual language. Short paragraphs. You may use **bold** for emphasis and bullet points when listing things.
+  return `You are FORGE Coach, an expert personal trainer and fitness coach embedded in the FORGE fitness tracking app. You have full context about this user and should give specific, actionable, personalized advice. Be direct, motivating, and concise - like a real coach, not a textbook. Use casual language. Short paragraphs. You may use **bold** for emphasis and bullet points when listing things.
 
 USER PROFILE:
 - Name: ${p.name || 'User'}
@@ -2633,7 +2633,7 @@ async function sendChatMessage() {
 }
 
 function sendSuggestion(el) {
-  const msg = el.textContent.replace(/💪/g,'').trim();
+  const msg = el.textContent.replace(/[STRONG]/g,'').trim();
   document.getElementById('chat-input').value = msg;
   sendChatMessage();
 }
@@ -2699,7 +2699,7 @@ function buildActionButtons(actionData) {
   if (!actionData) return [];
   const buttons = [];
   if (actionData.type === 'modify_workout' && state.session) {
-    buttons.push({ label: '✓ Apply to Workout', fn: `applyWorkoutChanges(${JSON.stringify(actionData.changes || [])})` });
+    buttons.push({ label: '&#10003; Apply to Workout', fn: `applyWorkoutChanges(${JSON.stringify(actionData.changes || [])})` });
   }
   if (actionData.type === 'suggest_exercise') {
     buttons.push({ label: '+ Add to Session', fn: `addSuggestedExercise('${actionData.exerciseId}')` });
@@ -2739,7 +2739,7 @@ function addUserMessage(text) {
   const div = document.createElement('div');
   div.className = 'chat-msg user';
   div.innerHTML = `
-    <div class="msg-avatar user">👤</div>
+    <div class="msg-avatar user">[USER]</div>
     <div>
       <div class="msg-bubble">${escapeHtml(text)}</div>
       <div class="msg-time">${timeNow()}</div>
@@ -2756,7 +2756,7 @@ function addCoachMessage(text, actionButtons, actionData) {
   const btns = (actionButtons || []).map(b =>
     `<span class="action-btn" onclick="${b.fn}">${b.label}</span>`).join('');
   div.innerHTML = `
-    <div class="msg-avatar coach">🤖</div>
+    <div class="msg-avatar coach">[BOT]</div>
     <div>
       <div class="msg-bubble">${formatted}${btns ? '<div style="margin-top:10px;">'+btns+'</div>' : ''}</div>
       <div class="msg-time">${timeNow()}</div>
@@ -2769,7 +2769,7 @@ function formatCoachText(text) {
   return escapeHtml(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^• (.+)$/gm, '<li>$1</li>')
+    .replace(/^&#8226; (.+)$/gm, '<li>$1</li>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
     .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
     .replace(/\n\n/g, '</p><p style="margin-top:8px;">')
@@ -2784,7 +2784,7 @@ function showTypingIndicator() {
   const msgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
   div.className = 'typing-indicator'; div.id = 'typing-indicator';
-  div.innerHTML = `<div class="msg-avatar coach">🤖</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  div.innerHTML = `<div class="msg-avatar coach">[BOT]</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
   msgs.appendChild(div);
   scrollChat();
 }
@@ -2845,7 +2845,7 @@ async function runBodyScan() {
   document.getElementById('scan-result-area').style.display = 'block';
   document.getElementById('scan-result-content').innerHTML = `
     <div class="scan-analyzing">
-      <div class="scan-pulse">📷</div>
+      <div class="scan-pulse">[CAM]</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;">ANALYZING YOUR BODY</div>
       <div style="font-size:13px;color:var(--muted);text-align:center;">Claude is estimating your composition...<br>This takes 10-15 seconds</div>
     </div>`;
@@ -2874,7 +2874,7 @@ USER PROFILE:
 - Training frequency: ${profile.days} days/week
 
 MEASUREMENTS PROVIDED:
-${measurementsText || 'No measurements provided — use photo analysis only'}
+${measurementsText || 'No measurements provided - use photo analysis only'}
 
 ${lastScan ? `PREVIOUS SCAN (${new Date(lastScan.date).toLocaleDateString()}):
 - Body fat: ${lastScan.bodyFat}%
@@ -2883,7 +2883,7 @@ ${lastScan ? `PREVIOUS SCAN (${new Date(lastScan.date).toLocaleDateString()}):
 
 ${notes ? `USER NOTES: ${notes}` : ''}
 
-${scanPhotoBase64 ? 'A photo has been provided — analyze body composition, visible muscle development, proportions, and areas of opportunity.' : 'No photo provided — base estimates on measurements and profile only.'}
+${scanPhotoBase64 ? 'A photo has been provided - analyze body composition, visible muscle development, proportions, and areas of opportunity.' : 'No photo provided - base estimates on measurements and profile only.'}
 
 Return ONLY a JSON object (no markdown, no backticks) with these exact fields:
 {
@@ -2904,7 +2904,7 @@ Return ONLY a JSON object (no markdown, no backticks) with these exact fields:
   "confidenceReason": "why confidence is at this level"
 }
 
-Be honest and realistic. If only basic info is provided with no photo, note lower confidence. Body fat estimates from photos alone have ±3-5% margin of error.`;
+Be honest and realistic. If only basic info is provided with no photo, note lower confidence. Body fat estimates from photos alone have &plusmn;3-5% margin of error.`;
 
     // Build message content
     const msgContent = scanPhotoBase64
@@ -2953,7 +2953,7 @@ Be honest and realistic. If only basic info is provided with no photo, note lowe
   }
 
   btn.disabled = false;
-  btn.textContent = '✨ Analyze with AI';
+  btn.textContent = '* Analyze with AI';
   scanPhotoBase64 = null;
   document.getElementById('camera-input').value = '';
   document.getElementById('scan-photo-preview').style.display = 'none';
@@ -2970,7 +2970,7 @@ function renderScanResult(r, entry, prev) {
     if (val === null) return '';
     const num = parseFloat(val);
     const isGood = invert ? num < 0 : num > 0;
-    const icon = num > 0 ? '▲' : num < 0 ? '▼' : '—';
+    const icon = num > 0 ? '&#9650;' : num < 0 ? '&#9660;' : '-';
     const cls = num === 0 ? 'neutral' : isGood ? 'down' : 'up';
     return `<div class="s-change ${cls}">${icon} ${Math.abs(num)} vs last</div>`;
   };
@@ -3014,7 +3014,7 @@ function renderScanResult(r, entry, prev) {
     <div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:12px;">
       <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Summary</div>
       <div style="font-size:13px;line-height:1.6;">${r.summary}</div>
-      <div style="margin-top:8px;font-size:11px;" >Confidence: <span style="color:${confColor};font-weight:600;">${r.confidence?.toUpperCase()}</span> — ${r.confidenceReason}</div>
+      <div style="margin-top:8px;font-size:11px;" >Confidence: <span style="color:${confColor};font-weight:600;">${r.confidence?.toUpperCase()}</span> - ${r.confidenceReason}</div>
     </div>
 
     ${r.muscleBalance ? `<div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:12px;">
@@ -3024,17 +3024,17 @@ function renderScanResult(r, entry, prev) {
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
       <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:14px;">
-        <div style="font-size:11px;color:var(--success);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">💪 Strengths</div>
-        ${(r.strengths||[]).map(s=>`<div style="font-size:12px;margin-bottom:4px;">• ${s}</div>`).join('')}
+        <div style="font-size:11px;color:var(--success);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">[STRONG] Strengths</div>
+        ${(r.strengths||[]).map(s=>`<div style="font-size:12px;margin-bottom:4px;">&#8226; ${s}</div>`).join('')}
       </div>
       <div style="background:rgba(85,37,131,0.15);border:1px solid rgba(85,37,131,0.3);border-radius:10px;padding:14px;">
-        <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🎯 Opportunities</div>
-        ${(r.opportunities||[]).map(o=>`<div style="font-size:12px;margin-bottom:4px;">• ${o}</div>`).join('')}
+        <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">[TARGET] Opportunities</div>
+        ${(r.opportunities||[]).map(o=>`<div style="font-size:12px;margin-bottom:4px;">&#8226; ${o}</div>`).join('')}
       </div>
     </div>
 
     <div style="background:rgba(253,185,39,0.06);border:1px solid rgba(253,185,39,0.2);border-radius:10px;padding:14px;">
-      <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⚡ Recommendations</div>
+      <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">* Recommendations</div>
       ${(r.recommendations||[]).map((rec,i)=>`<div style="font-size:12px;margin-bottom:6px;display:flex;gap:8px;"><span style="color:var(--gold);font-weight:600;">${i+1}.</span>${rec}</div>`).join('')}
     </div>`;
 }
@@ -3066,7 +3066,7 @@ function renderScanHistory() {
       <div class="scan-history-date">
         <span>${new Date(s.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}</span>
         <div style="display:flex;gap:6px;align-items:center;">
-          ${s.hasPhoto ? '<span style="font-size:11px;background:rgba(85,37,131,0.3);border:1px solid rgba(85,37,131,0.5);padding:2px 8px;border-radius:10px;color:var(--accent2);">📷 photo</span>' : ''}
+          ${s.hasPhoto ? '<span style="font-size:11px;background:rgba(85,37,131,0.3);border:1px solid rgba(85,37,131,0.5);padding:2px 8px;border-radius:10px;color:var(--accent2);">[CAM] photo</span>' : ''}
           <span style="font-size:11px;background:rgba(253,185,39,0.1);border:1px solid rgba(253,185,39,0.2);padding:2px 8px;border-radius:10px;color:var(--gold);">Score: ${s.overallScore}</span>
         </div>
       </div>
@@ -3078,7 +3078,7 @@ function renderScanHistory() {
         ${s.bmi ? `<div class="scan-mini-metric">BMI <span>${s.bmi}</span></div>` : ''}
         ${s.fitnessAge ? `<div class="scan-mini-metric">Fitness Age <span>${s.fitnessAge}</span></div>` : ''}
       </div>
-      ${s.notes ? `<div style="margin-top:8px;font-size:11px;color:var(--muted);">📝 ${s.notes}</div>` : ''}
+      ${s.notes ? `<div style="margin-top:8px;font-size:11px;color:var(--muted);">[NOTE] ${s.notes}</div>` : ''}
     </div>`).join('');
 }
 
@@ -3214,7 +3214,7 @@ function updateInternalBackupStatus() {
     el.textContent = `Last saved: ${info}`;
     el.style.color = 'var(--success)';
   } else {
-    el.textContent = 'No backup yet — complete a workout to generate one';
+    el.textContent = 'No backup yet - complete a workout to generate one';
     el.style.color = 'var(--muted)';
   }
 }
@@ -3247,12 +3247,12 @@ function processRestoreFile(file) {
       let restored = null;
 
       if (file.name.endsWith('.json')) {
-        // JSON backup — direct parse
+        // JSON backup - direct parse
         restored = JSON.parse(content);
         if (!restored.workoutHistory && !restored.profile) throw new Error('Invalid FORGE JSON backup');
 
       } else if (file.name.endsWith('.xml')) {
-        // XML backup — parse manually
+        // XML backup - parse manually
         restored = parseForgeXML(content);
       } else {
         throw new Error('Unsupported file type. Use .xml or .json');
@@ -3270,11 +3270,11 @@ function processRestoreFile(file) {
       status.style.background = 'rgba(74,222,128,0.08)';
       status.style.border = '1px solid rgba(74,222,128,0.2)';
       status.style.color = 'var(--success)';
-      status.innerHTML = `✓ Valid backup found:<br>
-        <strong>${workoutCount}</strong> workouts &nbsp;·&nbsp;
-        <strong>${prCount}</strong> personal records &nbsp;·&nbsp;
+      status.innerHTML = `&#10003; Valid backup found:<br>
+        <strong>${workoutCount}</strong> workouts &nbsp;&middot;&nbsp;
+        <strong>${prCount}</strong> personal records &nbsp;&middot;&nbsp;
         <strong>${scanCount}</strong> body scans<br>
-        <span style="color:var(--danger);font-size:11px;margin-top:4px;display:block;">⚠️ This will replace your current data. Make sure to export a backup first if needed.</span>`;
+        <span style="color:var(--danger);font-size:11px;margin-top:4px;display:block;">(!) This will replace your current data. Make sure to export a backup first if needed.</span>`;
 
       const confirmRow = document.getElementById('restore-confirm-row');
       confirmRow.style.display = 'flex';
@@ -3285,7 +3285,7 @@ function processRestoreFile(file) {
       status.style.background = 'rgba(248,113,113,0.08)';
       status.style.border = '1px solid rgba(248,113,113,0.2)';
       status.style.color = 'var(--danger)';
-      status.innerHTML = `✕ Could not read backup: ${err.message}`;
+      status.innerHTML = `&#10005; Could not read backup: ${err.message}`;
       document.getElementById('restore-confirm-row').style.display = 'none';
     }
   };
@@ -3387,7 +3387,7 @@ function parseForgeXML(xmlStr) {
 function confirmRestore() {
   if (!_pendingRestore) return;
 
-  // Merge profile carefully — keep existing prefs not in backup
+  // Merge profile carefully - keep existing prefs not in backup
   state.profile = { ...state.profile, ..._pendingRestore.profile };
   state.workoutHistory = _pendingRestore.workoutHistory || [];
   state.personalRecords = _pendingRestore.personalRecords || {};
@@ -3409,7 +3409,7 @@ function confirmRestore() {
   document.getElementById('pref-age').value = state.profile.age || '';
   document.getElementById('pref-weight').value = state.profile.weight || '';
 
-  showToast('✓ Data restored successfully!');
+  showToast('&#10003; Data restored successfully!');
 }
 
 function cancelRestore() {
