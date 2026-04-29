@@ -1258,106 +1258,286 @@ function generateWorkout() {
   }, 1800);
 }
 
+// =========================================================
+// EXERCISE HISTORY ANALYTICS
+// =========================================================
+
+// Returns all logged sets for a given exercise ID across full history
+function getExerciseHistory(exId) {
+  const results = [];
+  const allEx = [...EXERCISE_DB, ...state.customExercises];
+
+  for (const workout of state.workoutHistory) {
+    for (const ex of (workout.exercises || [])) {
+      // Match by ID or by name (covers Fitbod imports)
+      const canonical = allEx.find(e => e.id === exId);
+      const matchById = ex.id === exId;
+      const matchByName = canonical && ex.name &&
+        ex.name.toLowerCase() === canonical.name.toLowerCase();
+
+      if (matchById || matchByName) {
+        results.push({
+          date: workout.date,
+          sets: ex.completedSets || [],
+          totalVolume: (ex.completedSets||[]).reduce((a,s) => a+(s.weight*s.reps),0),
+          maxWeight: Math.max(...(ex.completedSets||[]).map(s=>s.weight||0), 0),
+          avgReps: (ex.completedSets||[]).length
+            ? (ex.completedSets.reduce((a,s)=>a+(s.reps||0),0) / ex.completedSets.length)
+            : 0,
+          allSetsCompleted: ex.completedSets?.length >= (ex.sessionSets || ex.completedSets?.length || 1),
+        });
+      }
+    }
+  }
+  return results.sort((a,b) => new Date(a.date)-new Date(b.date));
+}
+
+// Core progressive overload logic for a single exercise
+function calculateProgressiveLoad(exId, goalRepsRange, profile) {
+  const history = getExerciseHistory(exId);
+  const pr = state.personalRecords[exId] || 0;
+
+  // Base weights by muscle group and fitness level
+  const baseWeights = {
+    chest:135, back:135, shoulders:95,
+    biceps:40, triceps:50, legs:185, core:0, general:95
+  };
+  const ex = [...EXERCISE_DB, ...state.customExercises].find(e => e.id === exId);
+  const primary = ex?.primary || 'general';
+  let baseWeight = baseWeights[primary] || 95;
+  if (profile.level === 'beginner')      baseWeight = Math.round(baseWeight * 0.5);
+  else if (profile.level === 'advanced') baseWeight = Math.round(baseWeight * 1.5);
+
+  // No history at all — start conservatively
+  if (!history.length) {
+    if (pr > 0) return { weight: Math.round(pr * 0.75), note: 'Starting from PR' };
+    return { weight: baseWeight, note: 'Starting weight' };
+  }
+
+  const last = history[history.length - 1];
+  const lastWeight = last.maxWeight || baseWeight;
+  const lastAvgReps = Math.round(last.avgReps);
+  const targetRepsHigh = parseInt(String(goalRepsRange).split('-')[1] || goalRepsRange) || 12;
+  const targetRepsLow  = parseInt(String(goalRepsRange).split('-')[0] || goalRepsRange) || 8;
+
+  // Volume trend over last 4 sessions
+  const recent = history.slice(-4);
+  const volumes = recent.map(h => h.totalVolume);
+  const volumeTrend = volumes.length > 1
+    ? (volumes[volumes.length-1] - volumes[0]) / volumes[0]
+    : 0;
+
+  // DELOAD detection: volume dropping consistently over 3+ sessions
+  const needsDeload = volumes.length >= 3 &&
+    volumes[volumes.length-1] < volumes[volumes.length-2] &&
+    volumes[volumes.length-2] < volumes[volumes.length-3];
+
+  if (needsDeload) {
+    return {
+      weight: Math.round(lastWeight * 0.85),
+      note: 'Deload week - volume trending down',
+      deload: true,
+    };
+  }
+
+  // Progressive overload increments by goal and muscle
+  const increments = {
+    strength:    { large: 5, small: 2.5 },  // heavier exercises
+    hypertrophy: { large: 2.5, small: 1.25 },
+    endurance:   { large: 2.5, small: 1.25 },
+    'weight-loss':{ large: 2.5, small: 1.25 },
+    general:     { large: 2.5, small: 1.25 },
+  };
+  const inc = increments[profile.goal] || increments.general;
+  const isLargeMusle = ['legs','back','chest'].includes(primary);
+  const increment = isLargeMusle ? inc.large : inc.small;
+
+  let suggestedWeight = lastWeight;
+  let note = '';
+
+  if (last.allSetsCompleted && lastAvgReps >= targetRepsHigh) {
+    // Crushed it — increase weight
+    suggestedWeight = lastWeight + increment;
+    note = `+${increment}lbs (completed all sets at top of range)`;
+  } else if (last.allSetsCompleted && lastAvgReps >= targetRepsLow) {
+    // Completed all sets in range — hold weight, note solidifying
+    suggestedWeight = lastWeight;
+    note = 'Hold weight - solidifying this load';
+  } else if (!last.allSetsCompleted && lastAvgReps < targetRepsLow) {
+    // Struggled — reduce weight
+    suggestedWeight = Math.max(Math.round(lastWeight * 0.95), baseWeight * 0.5);
+    note = 'Reduced - previous session was tough';
+  } else {
+    // In range but not all sets done — hold and aim for completion
+    suggestedWeight = lastWeight;
+    note = 'Hold weight - aim to complete all sets';
+  }
+
+  // Never exceed 95% of PR for safety
+  if (pr > 0) suggestedWeight = Math.min(suggestedWeight, Math.round(pr * 0.95));
+
+  // Round to nearest 2.5lbs
+  suggestedWeight = Math.round(suggestedWeight / 2.5) * 2.5;
+
+  return { weight: Math.max(suggestedWeight, 0), note, volumeTrend };
+}
+
+// Calculate weekly volume per muscle group over recent weeks
+function getWeeklyMuscleVolume(muscleGroup, weeksBack = 2) {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - (weeksBack * 7));
+  let volume = 0;
+  for (const w of state.workoutHistory) {
+    if (new Date(w.date) < cutoff) continue;
+    if (!(w.muscles || []).includes(muscleGroup)) continue;
+    for (const ex of (w.exercises || [])) {
+      if ((ex.muscles || []).includes(muscleGroup)) {
+        volume += (ex.completedSets || []).reduce((a,s) => a+(s.weight*s.reps),0);
+      }
+    }
+  }
+  return volume;
+}
+
+// =========================================================
+// SMART WORKOUT BUILDER
+// =========================================================
 function buildWorkoutPlan() {
   const profile = state.profile;
   const split = SPLIT_TEMPLATES[profile.split] || SPLIT_TEMPLATES['push-pull-legs'];
-  const lastWorkout = state.workoutHistory.length ? state.workoutHistory[state.workoutHistory.length-1] : null;
+  const recentWorkouts = [...state.workoutHistory].reverse().slice(0, 10);
+  const lastWorkout = recentWorkouts[0] || null;
 
-  // Pick next split day
+  // Determine next split day
   let splitIndex = 0;
   if (lastWorkout && lastWorkout.splitIndex !== undefined) {
     splitIndex = (lastWorkout.splitIndex + 1) % split.length;
   }
   const day = split[splitIndex];
 
-  // Get available equipment
+  // Equipment at current location
   const equip = state.location === 'gym' ? profile.gymEquip : profile.homeEquip;
 
-  // Filter exercises: match muscles, equipment, limitations
-  const limitations = profile.limitations.toLowerCase();
-  const dislikes = profile.dislikes.toLowerCase();
+  // Parse limitations and dislikes
+  const limitations = (profile.limitations || '').toLowerCase();
+  const dislikes    = (profile.dislikes || '').toLowerCase();
+  const favorites   = (profile.favorites || '').toLowerCase();
 
+  // Build exercise pool: filter by muscle, equipment, limitations, dislikes
   let pool = [...EXERCISE_DB, ...state.customExercises].filter(ex => {
-    // Must match target muscles
     if (!ex.muscles.some(m => day.muscles.includes(m))) return false;
-    // Must have required equipment or no equipment needed
     if (ex.equipment.length > 0 && !ex.equipment.some(e => equip.includes(e))) return false;
-    // Skip limited exercises
-    if (ex.id === 'squat' && limitations.includes('squat')) return false;
-    if ((ex.id === 'bench-press') && (limitations.includes('bench press') || limitations.includes('spotter'))) return false;
-    // Skip dislikes
-    if (dislikes && ex.name.toLowerCase().split(' ').some(w => dislikes.includes(w))) return false;
+
+    // Check limitations keyword by keyword
+    const nameLower = ex.name.toLowerCase();
+    const limitWords = limitations.split(/[,.\n]+/).map(s => s.trim()).filter(Boolean);
+    for (const lim of limitWords) {
+      if (lim && nameLower.includes(lim)) return false;
+    }
+
+    // Check dislikes
+    const dislikeWords = dislikes.split(/[,.\n]+/).map(s => s.trim()).filter(Boolean);
+    for (const dis of dislikeWords) {
+      if (dis && nameLower.includes(dis)) return false;
+    }
+
     return true;
   });
 
-  // Sort by recovery (prioritize fresher muscles)
-  pool.sort((a,b) => (state.muscleRecovery[b.primary]||100) - (state.muscleRecovery[a.primary]||100));
+  // Score each exercise for selection priority
+  const lastExIds = new Set(recentWorkouts.slice(0,3).flatMap(w => (w.exercises||[]).map(e=>e.id)));
+  const favoriteWords = favorites.split(/[,.\n]+/).map(s=>s.trim().toLowerCase()).filter(Boolean);
 
-  // Target exercise count based on duration
-  const targetExercises = Math.round(profile.duration / 12);
+  pool = pool.map(ex => {
+    let score = 0;
+    const history = getExerciseHistory(ex.id);
+    const recovery = state.muscleRecovery[ex.primary] || 100;
 
-  // Pick exercises, avoid repeating same muscle group consecutively, add variety
-  let selected = [];
-  let usedIds = new Set();
-  // Track last workout exercises for variety
-  const lastExIds = lastWorkout ? (lastWorkout.exercises||[]).map(e=>e.id) : [];
+    score += recovery * 0.3;                              // recovery weight
+    if (!lastExIds.has(ex.id)) score += 30;              // variety bonus
+    if (history.length > 0) score += 20;                 // prefer exercises we have data on
+    if (favoriteWords.some(f => ex.name.toLowerCase().includes(f))) score += 25; // favorites
+    if (ex.custom || ex.fromFitbod) score += 5;          // slight bonus for user's own exercises
 
+    // Slight score boost for compound movements (more bang for buck)
+    const isCompound = ex.muscles.length >= 2;
+    if (isCompound) score += 10;
+
+    return { ...ex, _score: score };
+  }).sort((a,b) => b._score - a._score);
+
+  // Target exercise count based on session duration
+  // ~10-12 min per exercise including warm-up sets and rest
+  const targetExercises = Math.min(Math.max(Math.round(profile.duration / 11), 3), 8);
+
+  // Select exercises ensuring each target muscle gets at least one
+  const selected = [];
+  const usedIds = new Set();
+
+  // First pass: one exercise per target muscle group
   for (const m of day.muscles) {
-    const musclePool = pool.filter(ex => ex.primary === m && !usedIds.has(ex.id));
-    // Prefer exercises NOT in last workout
-    const fresh = musclePool.filter(ex => !lastExIds.includes(ex.id));
-    const pick = fresh.length ? fresh[0] : musclePool[0];
-    if (pick) { selected.push(pick); usedIds.add(pick.id); }
     if (selected.length >= targetExercises) break;
+    const pick = pool.find(ex => ex.primary === m && !usedIds.has(ex.id));
+    if (pick) { selected.push(pick); usedIds.add(pick.id); }
   }
 
-  // Fill remaining slots
-  if (selected.length < targetExercises) {
-    for (const ex of pool) {
-      if (!usedIds.has(ex.id) && selected.length < targetExercises) {
-        selected.push(ex);
-        usedIds.add(ex.id);
-      }
-    }
+  // Second pass: fill remaining slots with highest-scored remaining exercises
+  for (const ex of pool) {
+    if (selected.length >= targetExercises) break;
+    if (!usedIds.has(ex.id)) { selected.push(ex); usedIds.add(ex.id); }
   }
 
-  // Adjust sets/reps by goal
-  selected = selected.map(ex => {
-    let sets = ex.sets, reps = ex.reps, rest = ex.rest;
-    if (profile.goal === 'strength') { sets = Math.max(sets,4); reps = '4-6'; rest = 120; }
-    else if (profile.goal === 'hypertrophy') { sets = 3; reps = '8-12'; rest = 75; }
-    else if (profile.goal === 'endurance') { sets = 3; reps = '15-20'; rest = 45; }
-    else if (profile.goal === 'weight-loss') { sets = 3; reps = '12-15'; rest = 45; }
+  // Goal-based sets/reps/rest parameters
+  const goalParams = {
+    strength:    { sets: 5, repsRange: '3-5',   rest: 180 },
+    hypertrophy: { sets: 4, repsRange: '8-12',  rest: 90  },
+    endurance:   { sets: 3, repsRange: '15-20', rest: 45  },
+    'weight-loss':{ sets: 3, repsRange: '12-15', rest: 45 },
+    general:     { sets: 3, repsRange: '10-12', rest: 75  },
+  };
+  const gp = goalParams[profile.goal] || goalParams.general;
 
-    // Weight suggestions based on fitness level
-    const baseWeights = {chest:135,back:135,shoulders:95,biceps:40,triceps:50,legs:185,core:0};
-    let baseWeight = baseWeights[ex.primary] || 95;
-    if (profile.level === 'beginner') baseWeight = Math.round(baseWeight * 0.5);
-    if (profile.level === 'advanced') baseWeight = Math.round(baseWeight * 1.4);
+  // Apply progressive overload logic to each exercise
+  const exercisesWithLoad = selected.map(ex => {
+    const sets = ex.primary === 'core' ? 3 : gp.sets;
+    const repsRange = ex.primary === 'core' ? '30-60s' : gp.repsRange;
+    const rest = gp.rest;
 
-    // Check PR
-    const pr = state.personalRecords[ex.id];
-    if (pr) baseWeight = Math.round(pr * 0.85);
+    const { weight, note, deload, volumeTrend } = calculateProgressiveLoad(
+      ex.id, repsRange, profile
+    );
+
+    const history = getExerciseHistory(ex.id);
+    const sessionCount = history.length;
 
     return {
       ...ex,
       sessionSets: sets,
-      sessionReps: reps,
+      sessionReps: repsRange,
       sessionRest: rest,
-      suggestedWeight: ex.primary === 'core' ? 0 : baseWeight,
+      suggestedWeight: ex.primary === 'core' ? 0 : weight,
+      progressNote: note || '',
+      isDeload: !!deload,
+      sessionCount,
       completedSets: [],
       expanded: false,
     };
   });
 
+  // Detect overall deload need: if 3+ exercises flagged deload
+  const deloadCount = exercisesWithLoad.filter(e => e.isDeload).length;
+  const isDeloadWeek = deloadCount >= Math.floor(exercisesWithLoad.length / 2);
+
   return {
     name: day.name,
     muscles: day.muscles,
     splitIndex,
-    exercises: selected,
+    exercises: exercisesWithLoad,
     date: new Date().toISOString(),
     location: state.location,
     targetDuration: profile.duration,
+    isDeloadWeek,
+    generatedBy: 'progressive-overload-v2',
   };
 }
 
@@ -1370,6 +1550,17 @@ function renderWorkout() {
   document.getElementById('session-subtitle').textContent = s.muscles.join(' · ').replace(/\b\w/g,c=>c.toUpperCase());
   document.getElementById('session-location').textContent = s.location === 'gym' ? '24 Hour Fitness' : 'Garage Gym';
   document.getElementById('session-target').textContent = `~${s.targetDuration} min`;
+
+  // Deload week notice
+  const existing = document.getElementById('deload-notice');
+  if (existing) existing.remove();
+  if (s.isDeloadWeek) {
+    const notice = document.createElement('div');
+    notice.id = 'deload-notice';
+    notice.style.cssText = 'background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;color:var(--danger);';
+    notice.innerHTML = '😴 <strong>Deload Week Detected</strong> — Your volume has been trending down. Weights are reduced ~15% to let your body recover. Push harder next week!';
+    document.querySelector('.session-header').appendChild(notice);
+  }
 
   updateSetCounts();
   renderExerciseList();
@@ -1402,6 +1593,14 @@ function renderExerciseBlock(ex, i) {
     </tr>`;
   }
 
+  // Progress note bar
+  const progressBar = ex.progressNote ? `
+    <div style="padding:8px 16px;border-top:1px solid var(--border);background:${ex.isDeload ? 'rgba(248,113,113,0.06)' : 'rgba(253,185,39,0.04)'};display:flex;align-items:center;gap:8px;">
+      <span style="font-size:14px;">${ex.isDeload ? '😴' : ex.sessionCount === 0 ? '🆕' : '📈'}</span>
+      <span style="font-size:11px;color:${ex.isDeload ? 'var(--danger)' : 'var(--gold)'};">${ex.progressNote}</span>
+      ${ex.sessionCount > 0 ? `<span style="font-size:10px;color:var(--muted);margin-left:auto;">${ex.sessionCount} prev sessions</span>` : ''}
+    </div>` : '';
+
   return `<div class="exercise-block ${isActive?'active':''}" id="ex-block-${i}">
     <div class="exercise-header" onclick="toggleExercise(${i})">
       <div class="exercise-num">${i+1}</div>
@@ -1415,10 +1614,11 @@ function renderExerciseBlock(ex, i) {
         <button class="btn btn-danger btn-sm btn-icon" title="Remove" onclick="removeExercise(${i},event)">×</button>
       </div>
     </div>
+    ${isActive && ex.progressNote ? progressBar : ''}
     <div id="rest-timer-${i}" class="rest-timer">
       <div>
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Rest Time</div>
-        <div class="rest-countdown" id="rest-count-${i}">—</div>
+        <div class="rest-countdown" id="rest-count-${i}">-</div>
       </div>
       <button class="btn btn-secondary btn-sm" onclick="skipRest(${i})">Skip Rest</button>
     </div>
